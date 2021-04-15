@@ -1,5 +1,3 @@
-https://programmers.co.kr/learn/courses/30/lessons/43164
-
 
 ```go
 import (
@@ -77,3 +75,8 @@ func dfs(tickets [][]string, i, depth int, check []int) bool {
 	return len(tickets) == depth + 1
 }
 ```
+
+
+https://programmers.co.kr/learn/courses/30/lessons/43164
+
+출처: 프로그래머스 코딩 테스트 연습, https://programmers.co.kr/learn/challenges
