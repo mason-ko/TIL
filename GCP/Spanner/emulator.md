@@ -82,5 +82,6 @@ or
 gcloud spanner databases list --instance=test-instance
 ```
 
++
 
-
+에뮬레이터 테스트 이후, SPANNER_EMULATOR_HOST 환경 변수를 삭제해야 정상 동작됨!
