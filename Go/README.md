@@ -6,7 +6,7 @@
 [컴파일 언어의 가비지 컬렉터?]  
 
 ## Context
-[Go 💀에서 컨텍스트 취소 사용]
+[Go 💀에서 컨텍스트 취소 사용]  
 [Go Parent-child context cancelling order in Go]
 
 ## ETC
