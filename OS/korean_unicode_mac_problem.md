@@ -7,11 +7,30 @@
 
 한글을 처리하는 유니코드 정규화 방식이 맥과 윈도우가 다름
 
-맥: NFD (Normalization Form Canonical Decomposition) 
-윈도우: NFC (Normalization Form Canonical Composition) 
+맥: NFD (Normalization Form Canonical Decomposition) - 정준분해   
+윈도우: NFC (Normalization Form Canonical Composition) - 정준분해한 뒤에 다시 정준 결합  
 
+맥 같은 경우 자소 단위로 Unicode 가 붙여지고 ( Hangul Jamo: 1100 ~ 11FF )  
+윈도우 같은 경우 한글 호환 자모로 정준 결합되기에 (  Hangul Compatibility Jamo : 3130 ~ 318F )  
 
-단순처리
+NFC로 Normalize 한 값과, NFD로 Normalize 한 값의 Bytes 부터 큰 차이가 있음 
+
+```go
+func TestJamo(t *testing.T) {
+	fmt.Println("NFC: ", []byte("스크린샷"))
+	fmt.Println("NFD: ", []byte("스크린샷"))
+}
+```
+결과
+```
+=== RUN   TestJamo
+NFC:  [236 138 164 237 129 172 235 166 176 236 131 183]
+NFD:  [225 132 137 225 133 179 225 132 143 225 133 179 225 132 133 225 133 181 225 134 171 225 132 137 225 133 163 225 134 186]
+--- PASS: TestJamo (0.00s)
+```
+
+---
+이를 처리하기 위한 단순처리  
 ```go
 if path != "" {
 	t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
