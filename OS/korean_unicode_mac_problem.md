@@ -40,8 +40,9 @@ if path != "" {
 
 #참고  
 [유니코드 등가성]  
-[맥에서 한글이 자소단위로 풀어지는 현상]
-
+[맥에서 한글이 자소단위로 풀어지는 현상]  
+[한글과 유니코드]
 
 [유니코드 등가성]:https://ko.wikipedia.org/wiki/%EC%9C%A0%EB%8B%88%EC%BD%94%EB%93%9C_%EB%93%B1%EA%B0%80%EC%84%B1
 [맥에서 한글이 자소단위로 풀어지는 현상]:https://blog.edit.kr/entry/%EB%A7%A5%EC%97%90%EC%84%9C-%ED%95%9C%EA%B8%80%EC%9D%B4-%EC%9E%90%EC%86%8C%EB%8B%A8%EC%9C%84%EB%A1%9C-%ED%92%80%EC%96%B4%EC%A7%80%EB%8A%94-%ED%98%84%EC%83%81
+[한글과 유니코드]:https://gist.github.com/wafe/5ed2df3bdbd4e1966285eaadb12f4546
