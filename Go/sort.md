@@ -1,8 +1,8 @@
 ## sort interface
 
-- 기본적으로 quick sort 사용
-- element의 length 가 12 이상일 때 quick sort 사용
-- 미만일 시 삽입정렬
+- 기본적으로 사용하는 정렬 알고리즘은 quick sort
+- right - left 값이 12 이상 일 때 quick sort 사용
+- right - left 값이 12 미만 일 때는 gap 이 6 이상이면 left + 6 => right 까지는 ShellSort 를 돌리고, 남은 부분은 삽입 정렬
 
 ## 간단하게 사용시
 
