@@ -35,3 +35,10 @@ c = "1"
 print(a + b + c)
 ```
 = 2
+
+## Set
+Array 객체를 Object 형태로 변경 
+```python3
+l = set([3,1,2,3])
+print(l) # {3,1,2}  << array 값은 key로 변환되기에 중복된 값은 삭제됨
+```
