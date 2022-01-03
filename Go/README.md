@@ -9,8 +9,12 @@
 [Go 💀에서 컨텍스트 취소 사용]  
 [Go Parent-child context cancelling order in Go]
 
+## Profiling
+[Profiling Go Programs]
+
 ## ETC
 [힙 할당 여부 확인방법]  
+[Allocation efficiency in high-performance Go services]  
 [Uber의 Go언어 스타일 가이드 (Uber's Go Style Guide)]
 
 
@@ -21,3 +25,5 @@
 [Go 💀에서 컨텍스트 취소 사용]:https://www.sohamkamani.com/golang/2018-06-17-golang-using-context-cancellation/
 [Go Parent-child context cancelling order in Go]:https://stackoverflow.com/questions/53009084/parent-child-context-cancelling-order-in-go
 [Uber의 Go언어 스타일 가이드 (Uber's Go Style Guide)]:https://github.com/TangoEnSkai/uber-go-style-guide-kr
+[Profiling Go Programs]:https://go.dev/blog/pprof
+[Allocation efficiency in high-performance Go services]:https://segment.com/blog/allocation-efficiency-in-high-performance-go-services/
