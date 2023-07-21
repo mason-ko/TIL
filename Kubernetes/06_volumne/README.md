@@ -43,8 +43,63 @@
 기본적으로 각 컨테이너는 잘 정의된 단일 책임을 가지고 있지만 각각 컨테이너 자체만으로는 큰 쓸모가 없다.
 공유 스토리지가 없으면 각 파드에서 공통적인 데이터를 제공할 수 없음, 그렇기 때문에 볼륨을 사용해야함.
 
+### 사용 가능한 볼륨 유형
+- **emptyDir**: 일시적인 데이터를 저장하는데 사용하는 빈 디렉터리
+- **hostPath**: 워커 노드의 파일시스템을 파드의 디렉터리로 마운트하는데 사용
+  - 노드의 서비스와 함께 동작하는 파드에 대한 데이터를 저장하거나 사용하는경우
+  - 쿠버네티스 애플리케이션을 개발할때
+  - 노드의 장치파일을 파드에서 사용해야하는 경우
+  - 주의사항: 노드의 파일시스템을 사용하기 때문에 파드가 다른 노드로 이동하면 원래 노드의 파일&디렉터리에 접근할 수 없다.
+    그렇기 때문에 특정노드에 파드가 고정되어야하는 특수한 경우나, 모든 노드에 공통적으로 존재하는 파일이나 디렉터리에 접근해야하는 경우에 주로사용된다.
+- **gitRepo**: 깃 레포의 콘텐츠를 체크아웃해 초기화한 볼륨 ( 유지보수중단됨 - https://kubernetes.io/docs/concepts/storage/volumes/#gitrepo )
+- **nfs**: NFS 공유를 파드에 마운트
+- **gcePersistentDisk,awsElasticBlockStore,azureDisk**: 클라우드 제공자의 전용 스토리지 마운트
+- **cinder, cephfs, iscsi, flocker, glusterfs, quobyte, rbd, flexVolume, vsphere Volume, photonPersistentDisk，scalelO**: 다른 유형의 네트워크 스토리지 마운트
+- **configMap, secret, downwardAPI**: 쿠버네티스 리소스나 클러스터 정보를 파드에 노출하는데 사용되는 특별한 유형의 볼륨
+- **persistentVolumeClaim**: 사전에 혹은 동적으로 프로비저닝된 퍼시스턴트 스토리지를 사용 
+
 ## [6.2 볼륨을 사용한 컨테이너 간 데이터 공유](#index)
+### emptyDir 볼륨 사용
+시작 시 빈 디렉터리로 시작
+파드가 삭제되면 볼륨의 콘텐츠도 삭제
+**동일파드에서 실행중인 컨테이너 간 파일 공유할때 유용**
+단일 컨테이너에서도 임시 데이터를 디스크에 쓰는 목적에서 사용
+컨테이너의 파일시스템은 쓰기가 불가할수도있고 마운트된 볼륨에 쓰는것이 유일한 옵션일 수 있음
+### 파드 생성하기 
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortune
+spec:
+  containers:
+  - image: luksa/fortune
+    name: html-generator
+    volumeMounts: # html이란 이름의 볼륨을 컨테이너의 /var/htdocs에 마운트 
+    - name: html
+      mountPath: /var/htdocs
+  - image: nginx:alpine
+    name: web-server
+    volumeMounts: # 동일 볼륨을 /usr/share/nginx/html 에 마운트 
+    - name: html
+      mountPath: /usr/share/nginx/html
+      readOnly: true
+    ports:
+    - containerPort: 80
+      protocol: TCP
+  volumes: # html이란 단일 emptyDir 볼륨을 위 컨테이너 두개에 마운트
+  - name: html
+    emptyDir: {}
+```
+### gitRepo
+유지보수 중단으로 패스
 ## [6.3 워커 노드 파일시스템의 파일 접근](#index)
+대부분의 파드는 호스트 노드를 인식하지 못하므로 노드의 파일시스템에 있는 어떤파일에도 접근하면 안됨
+그러나 특정 시스템 레벨의 파드는 노드의 파일을 읽거나 할 때 사용
+### hostPath 볼륨 소개
+여러 파드가 동일 경로를 사용중이면 동일 파일 표시
+파드가 종료되도 콘텐츠는 삭제되지 않음 ( 데이터 유지 )
+
 ## [6.4 퍼시스턴트 스토리지 사용](#index)
 ## [6.5 기반 스토리지 기술과 파드 분리](#index)
 ## [6.6 퍼시스턴트볼륨의 동적 프로비저닝](#index)
