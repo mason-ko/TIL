@@ -123,8 +123,62 @@ spec:
 
 여러 클러스터 노드에서 접근 필요 시 NAS 유형 사용  
 ### GCE 퍼시스턴트 디스크를 파드 볼륨으로 사용하기 
+#### GCE 퍼시스턴트 디스크 생성하기 
+클러스터 조회하기  
+```
+$ gcloud container clusters list
+NAME ZONE MASTER_VERSION MASTER_IP . . .
+kubia europe-westl-b 1.2.5 104.155.84.137 . . 
+```
+GCE 퍼시스턴트 디스크도 동일한 영역에 아래와 같이 생성한다.
+```
+$gcloud compute disks create --size=lGiB --zone=europe-westl-b mongodb 
+```
 
+#### GCE 퍼시스턴트 디스크 볼륨을 사용하는 파드 생성하기 
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongodb 
+spec:
+  volumes:
+  - name: mongodb-data
+    gcePersistentDisk:
+      pdName: mongodb
+      fsType: ext4
+  containers:
+  - image: mongo
+    name: mongodb
+    volumeMounts:
+    - name: mongodb-data
+      mountPath: /data/db
+    ports:
+    - containerPort: 27017
+      protocol: TCP
+```
+> Minikube 를 사용한다면 GCE 퍼시스턴트 디스크 대신 hostPath 볼륨으로 사용한다. mongo-pod-hostpath.yaml 참고 
+
+볼륨을 mongoDB 내부에서 저장하는 데이터 경로에(/data/db) 마운트한다. 
+![image](https://github.com/mason-ko/TIL/assets/30224146/8b43a795-49ee-4e31-aa94-d88a5fed2a33)
+
+여기에서 의문점  
+스케일을 늘려 여러 파드에 동일 경로를 마운트 했을 때 병렬적인 데이터 처리 시 일관성이 깨질 수 있다.  
+그렇기 때문에 이 경우에는 StatefulSet 을 사용하여 PersistentVolumeClaim 로 마운트하여 사용  
+access Mode는 ReadWriteOnce  
+
+그렇다면 퍼시스턴트 볼륨 (PV) 와 퍼시스턴트 볼륨 클레임 (PVC) 의 차이는 뭘까  
+- **Persistent Volume (PV)**: PV는 클러스터 내에서 사용할 수 있는 스토리지의 양을 나타내는 API 리소스입니다. 이는 디스크와 같은 물리적 또는 네트워크 연결 스토리지를 추상화한 것입니다. PV는 자체 수명주기를 가지고 있고, 클러스터 리소스로 간주됩니다.
+- **Persistent Volume Claim (PVC)**: PVC는 사용자가 PV를 요청하는 방법입니다. 사용자는 PVC를 통해 특정 크기와 접근 모드를 가진 스토리지를 요청할 수 있습니다. PVC의 요청에 따라 쿠버네티스는 이를 충족하는 PV를 찾아 사용자에게 할당합니다.
 
 ## [6.5 기반 스토리지 기술과 파드 분리](#index)
+쿠버네티스는 애플리케이션과 개발자로부터 인프라스트럭처의 세부 사항을 숨기는 것을 목표로 하고 있습니다.  
+이러한 목표에 따르면, 애플리케이션 개발자는 기저에 어떤 종류의 스토리지 기술이나 물리 서버가 사용되는지 알 필요가 없습니다.  
+인프라스트럭처 관련 처리는 클러스터 관리자의 책임이어야 합니다.  
+### 퍼시스턴트볼륨과 퍼시스턴트볼륨클레임 소개 
+![image](https://github.com/mason-ko/TIL/assets/30224146/5cfe64ba-880f-420b-9ab7-4e21917abeaf)
+
+
+
 ## [6.6 퍼시스턴트볼륨의 동적 프로비저닝](#index)
 ## [6.7 요약](#index)
