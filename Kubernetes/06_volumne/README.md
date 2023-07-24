@@ -177,7 +177,115 @@ access Mode는 ReadWriteOnce
 인프라스트럭처 관련 처리는 클러스터 관리자의 책임이어야 합니다.  
 ### 퍼시스턴트볼륨과 퍼시스턴트볼륨클레임 소개 
 ![image](https://github.com/mason-ko/TIL/assets/30224146/5cfe64ba-880f-420b-9ab7-4e21917abeaf)
+### 퍼시스턴트볼륨 생성 
+위의 몽고 db 예제와 비교해보면, 이전과 달리 직접 클러스터 관리자의 역할로 GCE 퍼시스턴트 볼륨을 기반으로 한 퍼시스턴트 볼륨을 생성.  
+그 후 퍼시스턴트볼륨을 클레임해서 파드에서 사용.
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv
+spec:
+  capacity:  # pv 사이즈
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce # pv 접근 모드 
+    - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain # 클레임 해제 후 퍼시스턴트 볼륨 유지
+  gcePersistentDisk: # 퍼시스턴트 볼륨은 이전에 생성한 GCE 퍼시스턴트 디스크를 기반으로 함 
+    pdName: mongodb
+    fsType: ext4
+```
+> 미니큐브를 사용하는 경우 mongodb-pv-hostpath.yaml 파일로 PV 생성
 
+persistentVolumeReclaimPolicy 옵션 
+- Retain: 이 정책은 PV를 해제하고 관련 데이터를 보존합니다. PV는 여전히 API 서버에 존재하지만, 볼륨의 모든 리소스는 수동으로 해제해야 합니다. 이전 클레임에서 생성된 데이터에 접근하려면 동일한 PersistentVolumeClaim 객체를 사용해야 합니다.
+- Delete: 이 정책은 PV를 해제하고 관련 스토리지 자산(예: AWS EBS, GCE PD, Azure Disk 또는 vSphere 파일)을 삭제합니다. 동적으로 프로비저닝된 볼륨에서 사용할 수 있으며, 스토리지 클래스에서 정의한 삭제 정책을 사용합니다.
+- Recycle: 이 정책은 기본적으로 NFS와 같은 스토리지 볼륨을 단순히 삭제(rm -rf /thevolume/*)하고 다시 사용할 수 있게 합니다. 하지만 이 정책은 현재로서는 더 이상 권장되지 않으며, 대신 동적 프로비저닝을 사용하는 것이 좋습니다.
+
+
+퍼시스턴트 볼륨 조회
+```
+$ kubectl get pv
+```
+<img width="540" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/cef307dd-99d5-4dd7-8d6e-d4e9e2047ebb">
+
+### 퍼시스턴트볼륨클레임 생성을 통한 퍼시스턴트볼륨 요청 
+#### PVC 생성 
+kubectl create 로 쿠버네티스 api 에 게시  
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc # pvc의 이름으로 나중에 파드의 볼륨 요청할 때 사용 
+spec:
+  resources:
+    requests:
+      storage: 1Gi # 1기가 스토리지 요청 
+  accessModes:
+  - ReadWriteOnce # 읽기쓰기 
+  storageClassName: "" # 이 부분은 동적 프로비저닝 절에서 배운다.
+```
+
+> storageClassName 필드는 사용할 PersistentVolume(PV)의 스토리지 클래스를 지정하는 데 사용됩니다.
+> 스토리지 클래스를 이용하면, 각각의 PVC를 다른 유형의 스토리지(예: SSD, HDD, 고성능 스토리지, 등)와 연결할 수 있습니다.
+> 빈 값일 경우 default 가 사용되며, 특정 스토리지 클래스에 default 라는 어노테이션으로 추가 및 지정 가능.
+
+pvc 조회하기
+```
+$ kubectl get pvc
+```
+pvc 접근모드
+- RWO(ReadWriteOnce): 단일 노드 읽기/쓰기
+- ROX(ReadOnlyMany): 다수 노드 읽기
+- RWX(ReadWriteMany): 다수 노드 읽기/쓰기
+  
+PV 바운드 상태가 되어 더이상 Available로 표시되지 않음.  
+```
+$ kubectl get pv
+NAME CAPACITY ACCESSMODES STATUS CLAIM AGE
+mongodb-pv lGi RWOj ROX Bound default/mongodb-pvc lm
+```
+#### 파드에서 PVC 사용하기 
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongodb 
+spec:
+  containers:
+  - image: mongo
+    name: mongodb
+    volumeMounts:
+    - name: mongodb-data
+      mountPath: /data/db
+    ports:
+    - containerPort: 27017
+      protocol: TCP
+  volumes:
+  - name: mongodb-data
+    persistentVolumeClaim:
+      claimName: mongodb-pvc # 위에서 생성했던 이름으로 PVC 참조
+```
+#### PV와 PVC 사용의 장점 이해하기 
+<img width="668" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/89c398fe-b746-4e58-ad02-a3fecdc6b043">
+
+GCE 퍼시스턴트 디스크 직접 사용 vs PV, PVC 사용하는 방법의 장단점
+- 직접 사용하는 방법:
+  - 장점:
+간단하게 사용할 수 있습니다. PV나 PVC를 설정하거나 관리할 필요가 없습니다.
+디스크와 파드 사이의 직접적인 연결을 통해 관리가 단순화됩니다.
+  - 단점:
+스토리지 관리에 대한 유연성이 떨어집니다. 예를 들어, 특정 스토리지 클래스나 스토리지 크기를 동적으로 변경하는 등의 작업이 어렵습니다.
+쿠버네티스 환경에서의 이식성이 떨어집니다. 스토리지 구성이 파드에 직접 연결되어 있어, 다른 쿠버네티스 클러스터로 이동시키기 어렵습니다.
+- PV와 PVC를 사용하는 방법:
+  - 장점:
+스토리지 관리에 대한 유연성이 크게 증가합니다. 스토리지 클래스를 통해 스토리지 타입을 쉽게 변경할 수 있으며, PVC를 통해 스토리지 크기를 동적으로 조절할 수 있습니다.
+쿠버네티스 환경에서의 이식성이 좋습니다. 스토리지 구성이 파드에서 분리되어 있어, 동일한 스토리지 구성을 다른 쿠버네티스 클러스터에서도 쉽게 사용할 수 있습니다.
+스토리지 리소스의 생명주기 관리가 간편해집니다. PV와 PVC를 사용하면 스토리지 리소스의 생성, 사용, 해제 등의 생명주기를 쿠버네티스 API를 통해 관리할 수 있습니다.
+  - 단점:
+PV와 PVC 설정과 관리에 대한 추가적인 작업이 필요합니다.
+쿠버네티스의 스토리지 관련 개념과 작동 방식을 이해해야 합니다.
 
 
 ## [6.6 퍼시스턴트볼륨의 동적 프로비저닝](#index)
