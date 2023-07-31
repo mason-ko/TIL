@@ -1,4 +1,4 @@
-# Index
+![image](https://github.com/mason-ko/TIL/assets/30224146/991c7bec-7bce-4915-abcf-574329489685)# Index
 - [7장 컨피그맵과 시크릿: 애플리케이션 설정](#7장-컨피그맵과-시크릿-애플리케이션-설정)
   - [7.1 컨테이너화된 애플리케이션 설정](#71-컨테이너화된-애플리케이션-설정)
   - [7.2 컨테이너에 명령줄 인자 전달](#72-컨테이너에-명령줄-인자-전달)
@@ -131,12 +131,90 @@ SECOND_VAR 값은 foobar가 된다.
 - 코드와 설정의 분리 원칙 위반: 코드와 설정을 분리하는 것은 소프트웨어 개발의 일반적인 베스트 프랙티스입니다. 하드코딩된 환경 변수는 이 원칙을 위반하게 됩니다.
 ## 7.4 컨피그맵으로 설정 분리
 ### 7.4.1 컨피그맵소개
-
+- 키/값으로 이루진 맵.
+- 환경변수는 $(ENV_VAR) 구문을 사용해 명령줄 인수에서 참조할 수 있다.
+- 쿠버네티스 rest api 호출해서 직접 읽을 수 있지만, 무관하게 유지.
+- 독립적인 오브젝트에 설정을 포함하면, 각각 다른 환경에 관해 동일한 이름으로 여러 매니페스트를 유지 가능.
+![image](https://github.com/mason-ko/TIL/assets/30224146/ebab08bc-a52f-4025-9f9d-f44ad0631e2c)
 ### 7.4.2 컨피그맵 생성
+#### kubectl create configmap 명령 사용
+sleep-inverval=25 라는 단일 항목을 가진 fortune-config 컨피그맵 생성  
+생성 후 yaml 조회 가능  
+```
+$ kubectl create configmap fortune-config --from -literal=sleep-interval=25
+
+$ kubectl get configmap fortune-config -o yaml
+```
+#### 파일 내용으로 컨피그맵 생성 
+디스크에서 읽어 개별항목 지정  
+키 이름 직접 지정  
+--from-file 인수를 여러번 사용해 여러 파일 추가 가능  
+```
+$ kubectl create configmap my-config --from-file=config-file.conf
+
+$ kubectl create configmap my-config --from-file=customkey=config-file.conf
+```
+
+#### 디렉터리에 있는 파일로 컨피그맵 생성 
+```
+$ kubectl create configmap my-config --from-file=/path/to/dir
+```
+#### 옵션들 
+- --from-file=foo.json # 단일파일
+- --from-file=bar=foobar.json # 사용자 정의 키 밑에 파일 저장
+- --from-file=config-opts/ # 전체디렉터리
+- --from-literal=some=thing # 문자열 값 
+![image](https://github.com/mason-ko/TIL/assets/30224146/df8eecd2-28ab-4e7d-a529-3e9da03dc7c6)
+
 ### 7.4.3 컨피그맵 항목을 환경변수로 컨테이너에 전달
-### 7.4.4 컨피그맵의 모든 항목을 한 번에 환경변수로 전달
+파드 yaml
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortune-env-from-configmap
+spec:
+  containers:
+  - image: luksa/fortune:env
+    env:
+    - name: INTERVAL # INTERVAL 환경변수 설정 중 
+      valueFrom:  # 고정 값을 설정하는 대신 컨피그맵 키에서 값을 가져와 초기화 
+        configMapKeyRef:
+          name: fortune-config # 참조하는 컨피그맵 이름 
+          key: sleep-interval # 컨피그맵에서 해당 키 아래에 저장된 값으로 변수 설정 
+```
+#### 파드에 존재하지 않는 컨피그맵 참조 
+ex) Error: configmap "my-config" not found
+### 7.4.4 컨피그맵의 모든 항목을 한 번에 환경변수로 전달 
+```yaml
+spec:
+  containers:
+  - image: some-image
+    envFrom: # env 대신 envFrom 속성 사용
+    - prefix: CONFIG_ # 모든 환경변수는 CONFIG_ 접두사를 가짐, 여기 configmap 에서 가져온 환경변수앞에 이 prefix를 붙인다는뜻 ex) FOO 는 CONFIG_FOO 가 됨 
+    configMapRef:
+      name: my-config-map # my-config-map 이라는 컨피그맵 참조 
+```
 ### 7.4.5 컨피그맵 항목을 명령줄 인자로 전 달
+![image](https://github.com/mason-ko/TIL/assets/30224146/4e4ae0a4-c82e-4a61-947d-56bce44708a0)
+```yaml
+apiVersion: vl
+kind: Pod
+metadata:
+  name: fortune-angs-from-configmap
+spec:
+  containers:
+  - image: luksa/fortune:args
+    env:
+    - name: INTERVAL
+      valueFrom:
+        configMapKeyRef:
+          name: fortune-config
+          key: sleep-interval
+    args: ["$(INTERVAL)"] # $(ENV_NAME) 문법 사용 
+```
 ### 7.4.6 컨피그맵 볼륨을 사용해 컨피그맵 항목을 파일로 노출
+
 ### 7.4.7 애플리케이션을 재시작하지 않고 애플리케이션 설정 업데이트
 ## 7.5 시크릿으로 민감한 데이터를 컨테이너에 전달
 ### 7.5.1 시크릿소개
