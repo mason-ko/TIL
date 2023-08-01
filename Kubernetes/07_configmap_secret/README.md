@@ -292,11 +292,75 @@ volumes:
     defaultMode: "6600"  # -rw-rw----- 로 설정 
 ```
 ### 7.4.7 애플리케이션을 재시작하지 않고 애플리케이션 설정 업데이트
+환경변수 또는 명령줄 인수를 사용할때는 프로세스 실행중 업데이트 불가.  
+컨피그맵을 사용해 볼륨으로 노출하면 재시작 없이 업데이트 가능.  
+- 단. golang 에서 환경변수로 읽을 때에는 해당되지 않고, 직접적으로 ConfigMap 볼륨으로 마운트한  
+경로에 io로 접근했을 때 ( os.ReadFile ) 에만 가능하다.  
+- 환경변수는 프로세스가 시작할 때 한번만 읽히기 때문에 환경변수로 사용시에는 재시작이 필요함.
 ## 7.5 시크릿으로 민감한 데이터를 컨테이너에 전달
 ### 7.5.1 시크릿소개
+자격증명, 개인암호호 키와 같은 민감정보를 보관하고 시크릿이라는 별도 오브젝트를 제공.  
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secret-pod
+spec:
+  containers:
+  - name: secret-container
+    image: my-image
+    volumeMounts:
+    - name: secret-volume
+      mountPath: "/etc/secret" # Secret을 마운트할 경로 지정
+  volumes:
+  - name: secret-volume
+    secret:
+      secretName: my-secret # 사용할 Secret 이름 지정
+```
+시크릿의 데이터 항목을 컨피그맵 처럼 환경변수로 사용 가능하며, env, envFrom 동일하게 사용 가능.  
+시크릿고 컨피그맵의 차이는
+- 데이터의 민감성: Secret 오브젝트는 민감한 데이터, 예를 들어 암호, OAuth 토큰, ssh 키 등을 저장하는 데 사용됩니다. 반면에 ConfigMap은 일반적인(non-sensitive) 설정 정보, 예를 들어 애플리케이션의 config 파일, shell 스크립트 등을 저장하는 데 사용됩니다.
+- 데이터의 암호화: Kubernetes의 Secret은 기본적으로 etcd에 base64 인코딩된 형태로 저장됩니다. 이는 암호화가 아니라 인코딩이므로, 실제로는 plaintext로 저장되는 것과 동일합니다. 그러나 Kubernetes 1.7 이상에서는 etcd에 Secret을 암호화하여 저장하는 기능을 제공합니다. ConfigMap은 이러한 암호화 옵션이 없으며, 항상 plaintext로 저장됩니다.
+- 사용 사례: ConfigMaps는 설정 파일이나 속성을 컨테이너화된 애플리케이션으로 전달하는데 사용되며, Secrets는 민감한/비밀 정보를 안전하게 전달하는데 사용됩니다.
+- 크기 제한: Secret 오브젝트의 최대 크기는 1MiB입니다. 이 크기 제한은 API 서버와 kubelet 간의 메모리 사용량을 제한하는 데 사용됩니다. ConfigMap에는 이와 같은 크기 제한이 없습니다 (단, etcd에서 데이터를 읽고 쓰는 퍼포먼스가 제한 요인이 될 수 있습니다).
+  
 ### 7.5.2 기본 토큰 시크릿 소개
+```
+$ kubectl get secrets
+```
+시크릿이 갖고 있는 세 가지 항목(ca.crt, namespace, token) 은 파드 안에서 쿠버네티스  
+API 서버와 통신할 때 필요한 모든것을 나타낸다.  
+- ca.crt: 이 파일은 쿠버네티스 클러스터의 CA(Certificate Authority) 인증서를 포함하고, 클러스터 내의 다른 서비스와 통신할 때 SSL/TLS를 사용하여 이들 서비스가 신뢰할 수 있는 서비스임을 증명하는 데 사용되는 인증서
+- namespace: 이 파일은 현재 파드가 실행되고 있는 네임스페이스의 이름을 포함하고 있습니다. 파드가 어떤 네임스페이스에서 실행되고 있는지를 알아야 할 때 이 파일을 참조하면 됩니다.
+- token: 이 파일은 Service Account 토큰을 포함하고 있다. 이 토큰은 쿠버네티스 API 서버에 대한 인증에 사용되며, 해당 Service Account 권한을 가진 사용자로써 API 서버에 요청을 보낼 수 있게 해줌. 이를 통해 Pods 는 자신의 권한 내에서 쿠버네티스 API를 사용할 수 있게 된다.
 ### 7.5.3 시크릿 생성
+먼저 인증서와 개인 키 파일 생성.
+```
+$ openssl genrsa -out https.key 2048
+$ openssl req -new -x509 -key https.key -out https.cert -days 3650 -subj
+/CN=www•kubia-example•com
+```
+시크릿에 대한 foo 더미파일 안에 bar 문자열 저장  
+```
+$ echo bar > foo
+```
+이제 세가지 파일에서 시크릿을 만들 수 있다. 
+```
+$ kubectl create secret generic fortune-https --from-file=https.key --from-file=https.cert --from-file=foo
+
+secret "fortune-https" created
+```
+--from-file=fortune-https 옵션 이용해 개별파일 대신 디렉터리 전체 포함 가능.
 ### 7.5.4 컨피그맵과 시크릿 비교
+<img width="593" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/ce68c0a1-b11b-409c-8d95-96f83804b770">
+시크릿 항목의 내용은 Base64 인코딩 문자열로 표시된다.  
+#### stringData 필드 소개 
+```yaml
+kind: Secret
+apiVersion: v1
+stringData: # stringDat는 바이너리 데이터가 아닌 시크릿 데이터에 사용 할 수 있다.
+  foo: plain text # plain text는 base64 인코딩 되지 않는것을 볼 수있다. 
+```
 ### 7.5.5 파드에서 시크릿 사용
 ### 7.5.6 이미지를 가져올 때 사용하는 시크릿 이해
 ## 7.6 요 약
