@@ -1,4 +1,4 @@
-![image](https://github.com/mason-ko/TIL/assets/30224146/991c7bec-7bce-4915-abcf-574329489685)# Index
+# Index
 - [7장 컨피그맵과 시크릿: 애플리케이션 설정](#7장-컨피그맵과-시크릿-애플리케이션-설정)
   - [7.1 컨테이너화된 애플리케이션 설정](#71-컨테이너화된-애플리케이션-설정)
   - [7.2 컨테이너에 명령줄 인자 전달](#72-컨테이너에-명령줄-인자-전달)
@@ -191,9 +191,16 @@ spec:
   containers:
   - image: some-image
     envFrom: # env 대신 envFrom 속성 사용
-    - prefix: CONFIG_ # 모든 환경변수는 CONFIG_ 접두사를 가짐, 여기 configmap 에서 가져온 환경변수앞에 이 prefix를 붙인다는뜻 ex) FOO 는 CONFIG_FOO 가 됨 
-    configMapRef:
-      name: my-config-map # my-config-map 이라는 컨피그맵 참조 
+    - prefix: CONFIG_ # 모든 환경변수는 CONFIG_ 접두사를 가짐
+      configMapRef:
+        name: my-config-map # my-config-map 이라는 컨피그맵 참조
+    volumeMounts:
+    - name: config-volume
+      mountPath: /config  # 볼륨을 마운트할 경로 지정
+  volumes:
+  - name: config-volume
+    configMap:
+      name: my-config-map
 ```
 ### 7.4.5 컨피그맵 항목을 명령줄 인자로 전 달
 ![image](https://github.com/mason-ko/TIL/assets/30224146/4e4ae0a4-c82e-4a61-947d-56bce44708a0)
@@ -218,8 +225,72 @@ spec:
 이 파일들을 컨테이너에 노출시키려면, 컨피그맵 볼륨 사용  
 - 컨피그맵 오브젝트는 key-value형태로 저장하기때문에  ngnix 설정파일, yaml, 텍스트 등 다양한 형태의 설정파일이 될 수 있다.
 #### 볼륨 안에 있는 컨피그맵 항목 사용 
+Nginx 기준으로 설정파일 위치(/etc/nginx/ngix.conf) 에 맞게 마운트를 해야한다.  
+![image](https://github.com/mason-ko/TIL/assets/30224146/009895f5-c4fd-46d7-9152-518812853173)
+```yaml
+apiVersion: vl
+kind: Pod
+metadata:
+  name: fortune-configmap-volume
+spec:
+  containers:
+  - image: nginx:alpine
+    name: web-server
+    volumeMounts:
+    ...
+    - name: config
+      mountPath: /etc/nginx/conf.d # 컨피그맵 볼륨을 마운트하는 위치 
+      readonly: true
+    ...
+  volumes:
+  ...
+  - name: config # 위의 볼륨 마운트의 name 과 일치해야함
+    configMap:
+      name: fortune-config # 이 볼륨은 fortune-config 컨피그맵을 참조한다.
+...
+```
+#### 마운트된 컨피그맵 볼륨 내용 살펴보기 
+```
+$ kubectl exec fortune-configmap-volumne -c web-server ls /etc/nginx/config.d
+```
+#### 볼륨에 특정 컨피그맵 항목 노출 
+```yaml
+volumes:
+- name: config
+  configMap:
+  name: fortune-config 
+  items: # 볼륨에 포함할 항목을 조회해 선택 
+  - key: my-nginx-cᄋnfig.conf # 해당 키 아래에 항목 포함 
+    path: gzip.conf # 항목 값이 지정된 파일에 저장 
+```
+#### 디렉터리를 마운트할 때 디텍터리의 기존 파일을 숨기는 것 이해 
+마운트시 마운트 된 디렉터리에 이 오브젝트의 모든 항목이 파일로 생성이되는데, 이때 해당 디렉터리에 이미 파일이 있었다면,  
+이 파일들은 마운트에 의해 "숨겨진다"  
+마운트된 파일 시스템이 기존 파일 시스템 위에 "덮어씌워지는" 것이기 때문에, 접근이 불가함  
+예를 들어, /etc 에 컨피그맵을 마운트하면 원래있던 파일들을 볼 수 없게 됨으로써  
+별도의 하위 디렉터리를 생성하여 마운트하는 것이 안전하다.
+#### 디렉터리 안에 다른 파일을 숨기지 않고 개별 컨피그맵 항목을 파일로 마운트
+volumeMount에 subPath 속성으로 파일이나 디렉터리 하나를 볼륨에 마운트 할 수 있다.
+![image](https://github.com/mason-ko/TIL/assets/30224146/b1fa5761-169a-4f75-b8e2-ea2a66a0acb0)
 
-
+```yaml
+  containers:
+  - image: some/image
+    volumeMounts:
+    - name: myvolume
+      mountPath: /etc/someconfig.conf # 디렉터리가 아닌 파일 마운트
+      subPath: myconfig.conf # 전체 볼륨을 마운트하는 대신 myconfig.conf 항목만 마운트 
+```
+#### 컨피그맵 볼륨 안에 있는 파일 권한 설정 
+기본적으로 컨피그맵 볼륨의 모든 파일권한은 644(-rw-r-r--)  
+defaultMode 속성을 설정해 변경 가능 
+```yaml
+volumes:
+  - name: config
+    configMap:
+    name: fortune-config # 모든파일권한을
+    defaultMode: "6600"  # -rw-rw----- 로 설정 
+```
 ### 7.4.7 애플리케이션을 재시작하지 않고 애플리케이션 설정 업데이트
 ## 7.5 시크릿으로 민감한 데이터를 컨테이너에 전달
 ### 7.5.1 시크릿소개
