@@ -23,7 +23,6 @@
     - [7.5.4 컨피그맵과 시크릿 비교](#754-컨피그맵과-시크릿-비교)
     - [7.5.5 파드에서 시크릿 사용](#755-파드에서-시크릿-사용)
     - [7.5.6 이미지를 가져올 때 사용하는 시크릿 이해](#756-이미지를-가져올-때-사용하는-시크릿-이해)
-- [7.6 요약](#76-요약)
 
 
 # 7장 컨피그맵과 시크릿: 애플리케이션 설정
@@ -361,6 +360,101 @@ apiVersion: v1
 stringData: # stringDat는 바이너리 데이터가 아닌 시크릿 데이터에 사용 할 수 있다.
   foo: plain text # plain text는 base64 인코딩 되지 않는것을 볼 수있다. 
 ```
+#### 파드에서 시크릿 항목 읽기 
+secret 볼륨, 환경변수로 시크릿 노출 모두 앱에서 디코딩할 필요 없다.
+
 ### 7.5.5 파드에서 시크릿 사용
+#### fortune-https 시크릿을 파드에 마운트 
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortune-https
+spec:
+  containers:
+  - image: luksa/fortune:env
+    name: html-generator
+    env:
+    - name: INTERVAL
+      valueFrom: 
+        configMapKeyRef:
+          name: fortune-config
+          key: sleep-interval
+    volumeMounts:
+    - name: html
+      mountPath: /var/htdocs
+  - image: nginx:alpine
+    name: web-server
+    volumeMounts:
+    - name: html
+      mountPath: /usr/share/nginx/html
+      readOnly: true
+    - name: config
+      mountPath: /etc/nginx/conf.d
+      readOnly: true
+    - name: certs           # nginx 서버가 인증서와 키를 /etc/nginx/certs 에서 읽도록 설정했기 때문에 시크릿 볼륨을 해당 위치에 마운트한다.
+      mountPath: /etc/nginx/certs/
+      readOnly: true
+    ports:
+    - containerPort: 80
+    - containerPort: 443
+  volumes:
+  - name: html
+    emptyDir: {}
+  - name: config
+    configMap:
+      name: fortune-config
+      items:
+      - key: my-nginx-config.conf
+        path: https.conf
+  - name: certs       # fortune-https 시크릿을 참조하도록 시크릿 볼륨을 정의한다.
+    secret:
+      secretName: fortune-https
+```
+![image](https://github.com/mason-ko/TIL/assets/30224146/36770271-8f54-40fa-b1d0-2179abb15861)
+
+#### 시크릿 볼륨을 메모리에 저장하는 이유 
+secret 볼륨은 인메모리 파일시스템(tmpfs)를 사용한다. 이유는, 민감한 데이터를 노출시킬 수도 있는 디스크에 저장하지 않기 위해.
+- tmpfs는 메모리에 기반한 임시 파일 시스템으로, 물리적 디스크에 데이터를 기록하는 대신 메모리를 사용하며, 빠른 성능(메모리접근), 보안(재부팅시 데이터 삭제)이 좋다.
+#### 환경변수로 시크릿 항목 노출 
+```yaml
+env:
+- name: FOO_SECRET
+  valueFrom:
+    secretKeyRef: # 변수는 시크릿 항목에서 설정된다.
+      name: fortune-https # 키를 갖고 있는 시크릿의 이름 
+      key: foo # 노출할 시크릿의 키 이름 
+```
+시크릿을 환경변수로 노출시 편리한 방법이지만 일반적으로는 권장되지 않는다.
+- 로그에 노출될 위험성: 시스템 로그는 종종 실행 중인 프로세스와 관련된 정보, 환경변수를 포함하여 기록하기때문에 해당 시크릿이 로그에 실수로 기록될 위험이 있다.
+- 서브 프로세스에 노출: 시스템의 부모 프로세스는 자식 프로세스와 환경변수를 공유하기때문에 의도치 않게 서브 프로세스에 노출될 수 있다.
+- 불필요한 공유 제한: 모든 환경 변수는 해당 컨테이너에서 실행되는 모든 프로세스에 공유된다. 이는 필요이상으로 넓은 범위에서 시크릿이 노출될 수 있음을 의미함.
+
+고로, 환경변수로 노출할때는 심사숙고해야하며, 안전을 위해서는 시크릿을 노출할 때 항상 secret 볼륨을 사용해야한다.
+
 ### 7.5.6 이미지를 가져올 때 사용하는 시크릿 이해
-## 7.6 요 약
+imagePullSecrets은 자격증명을 전달하여 사용하며, private Docker registry 나 다른 비공개 이미지 저장소에서 컨테이너 이미지를 가져올 때 필요하다.
+#### 도커 허브에서 프라이빗 이미지 사용
+http://hub.docker.com
+- 도커 레지스트리 자격증명을 가진 시크릿 생성
+- 파드 매니페스트 안에 imagePullSecrets 필드에 해당 시크릿 참조
+```
+$ kubectl create secret docker-registry mydockerhubsecret \
+--docker-username=myusername --docker-password=mypassword \
+--docker-email=my.email@provider.com
+```
+#### 파드 정의에서 도커 레지스트리 시크릿 사용 
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: private-pod
+spec:
+  imagePullSecrets: # 프라이빗 이미지 레지스트리에서 이미지를 가져올 수 있도록 설정 
+  - name: mydockerhubsecret
+  containers:
+  - image: username/private:tag
+    name: main
+```
+#### 모든 파드에서 이미지를 가져올 때 사용할 시크릿을 모두 지정할 필요는 없다
+12장에서 이미지를 가져올 때 사용할 시크릿을 서비스어카운트에 추가해 자동으로 추가할 방법을 배울것이다.
