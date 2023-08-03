@@ -1,0 +1,338 @@
+Name:               gke-oscar-cluster-2-default-pool-a533dc83-ew5k
+Roles:              <none>
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/instance-type=e2-small
+                    beta.kubernetes.io/os=linux
+                    cloud.google.com/gke-boot-disk=pd-balanced
+                    cloud.google.com/gke-container-runtime=containerd
+                    cloud.google.com/gke-cpu-scaling-level=2
+                    cloud.google.com/gke-logging-variant=DEFAULT
+                    cloud.google.com/gke-max-pods-per-node=110
+                    cloud.google.com/gke-nodepool=default-pool
+                    cloud.google.com/gke-os-distribution=cos
+                    cloud.google.com/gke-provisioning=standard
+                    cloud.google.com/gke-stack-type=IPV4
+                    cloud.google.com/machine-family=e2
+                    cloud.google.com/private-node=false
+                    failure-domain.beta.kubernetes.io/region=us-central1
+                    failure-domain.beta.kubernetes.io/zone=us-central1-c
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=gke-oscar-cluster-2-default-pool-a533dc83-ew5k
+                    kubernetes.io/os=linux
+                    node.kubernetes.io/instance-type=e2-small
+                    topology.gke.io/zone=us-central1-c
+                    topology.kubernetes.io/region=us-central1
+                    topology.kubernetes.io/zone=us-central1-c
+Annotations:        container.googleapis.com/instance_id: 7045368328600510167
+                    csi.volume.kubernetes.io/nodeid:
+                      {"pd.csi.storage.gke.io":"projects/swit-dev/zones/us-central1-c/instances/gke-oscar-cluster-2-default-pool-a533dc83-ew5k"}
+                    node.alpha.kubernetes.io/ttl: 0
+                    node.gke.io/last-applied-node-labels:
+                      cloud.google.com/gke-boot-disk=pd-balanced,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=2,clou...
+                    node.gke.io/last-applied-node-taints: 
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Sat, 08 Jul 2023 13:04:40 +0900
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  gke-oscar-cluster-2-default-pool-a533dc83-ew5k
+  AcquireTime:     <unset>
+  RenewTime:       Thu, 03 Aug 2023 18:01:06 +0900
+Conditions:
+  Type                          Status  LastHeartbeatTime                 LastTransitionTime                Reason                          Message
+  ----                          ------  -----------------                 ------------------                ------                          -------
+  FrequentContainerdRestart     False   Thu, 03 Aug 2023 17:58:36 +0900   Sat, 08 Jul 2023 13:04:45 +0900   NoFrequentContainerdRestart     containerd is functioning properly
+  CorruptDockerOverlay2         False   Thu, 03 Aug 2023 17:58:36 +0900   Sat, 08 Jul 2023 13:04:45 +0900   NoCorruptDockerOverlay2         docker overlay2 is functioning properly
+  FrequentUnregisterNetDevice   False   Thu, 03 Aug 2023 17:58:36 +0900   Sat, 08 Jul 2023 13:04:45 +0900   NoFrequentUnregisterNetDevice   node is functioning properly
+  KernelDeadlock                False   Thu, 03 Aug 2023 17:58:36 +0900   Sat, 08 Jul 2023 13:04:45 +0900   KernelHasNoDeadlock             kernel has no deadlock
+  ReadonlyFilesystem            False   Thu, 03 Aug 2023 17:58:36 +0900   Sat, 08 Jul 2023 13:04:45 +0900   FilesystemIsNotReadOnly         Filesystem is not read-only
+  FrequentKubeletRestart        False   Thu, 03 Aug 2023 17:58:36 +0900   Sat, 08 Jul 2023 13:04:45 +0900   NoFrequentKubeletRestart        kubelet is functioning properly
+  FrequentDockerRestart         False   Thu, 03 Aug 2023 17:58:36 +0900   Sat, 08 Jul 2023 13:04:45 +0900   NoFrequentDockerRestart         docker is functioning properly
+  NetworkUnavailable            False   Thu, 03 Aug 2023 13:02:23 +0900   Thu, 03 Aug 2023 13:02:23 +0900   RouteCreated                    NodeController create implicit route
+  MemoryPressure                False   Thu, 03 Aug 2023 18:00:46 +0900   Sat, 08 Jul 2023 13:04:39 +0900   KubeletHasSufficientMemory      kubelet has sufficient memory available
+  DiskPressure                  False   Thu, 03 Aug 2023 18:00:46 +0900   Sat, 08 Jul 2023 13:04:39 +0900   KubeletHasNoDiskPressure        kubelet has no disk pressure
+  PIDPressure                   False   Thu, 03 Aug 2023 18:00:46 +0900   Sat, 08 Jul 2023 13:04:39 +0900   KubeletHasSufficientPID         kubelet has sufficient PID available
+  Ready                         True    Thu, 03 Aug 2023 18:00:46 +0900   Sat, 08 Jul 2023 13:04:41 +0900   KubeletReady                    kubelet is posting ready status. AppArmor enabled
+Addresses:
+  InternalIP:  10.128.15.229
+  ExternalIP:  35.232.219.45
+  Hostname:    gke-oscar-cluster-2-default-pool-a533dc83-ew5k
+Capacity:
+  cpu:                2
+  ephemeral-storage:  98831908Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             2027964Ki
+  pods:               110
+Allocatable:
+  cpu:                940m
+  ephemeral-storage:  47060071478
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             1401276Ki
+  pods:               110
+System Info:
+  Machine ID:                 9ef8034f20b0e82f51918f938fe8961e
+  System UUID:                9ef8034f-20b0-e82f-5191-8f938fe8961e
+  Boot ID:                    8ab201b7-bcfc-47f5-a5bb-25c31e5c6efd
+  Kernel Version:             5.15.107+
+  OS Image:                   Container-Optimized OS from Google
+  Operating System:           linux
+  Architecture:               amd64
+  Container Runtime Version:  containerd://1.6.18
+  Kubelet Version:            v1.26.5-gke.1200
+  Kube-Proxy Version:         v1.26.5-gke.1200
+PodCIDR:                      10.32.5.0/24
+PodCIDRs:                     10.32.5.0/24
+ProviderID:                   gce://swit-dev/us-central1-c/gke-oscar-cluster-2-default-pool-a533dc83-ew5k
+Non-terminated Pods:          (10 in total)
+  Namespace                   Name                                                         CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                                                         ------------  ----------  ---------------  -------------  ---
+  default                     oscar-server-2-65857cbdb6-htv2p                              0 (0%)        0 (0%)      0 (0%)           0 (0%)         26d
+  exam-jsh                    nginx-jsh-675c95594c-69fl7                                   0 (0%)        0 (0%)      0 (0%)           0 (0%)         55s
+  kube-system                 container-watcher-bwzwz                                      25m (2%)      125m (13%)  50Mi (3%)        300Mi (21%)    12d
+  kube-system                 fluentbit-gke-b6zjr                                          100m (10%)    0 (0%)      200Mi (14%)      500Mi (36%)    15d
+  kube-system                 gke-metrics-agent-fxclp                                      11m (1%)      0 (0%)      150Mi (10%)      150Mi (10%)    26d
+  kube-system                 konnectivity-agent-7d4947ff9b-gc5vv                          10m (1%)      0 (0%)      30Mi (2%)        125Mi (9%)     26d
+  kube-system                 kube-dns-5b5dfcd97b-c64k7                                    260m (27%)    0 (0%)      110Mi (8%)       210Mi (15%)    26d
+  kube-system                 kube-dns-autoscaler-5f56f8997c-vqjwv                         20m (2%)      0 (0%)      10Mi (0%)        0 (0%)         26d
+  kube-system                 kube-proxy-gke-oscar-cluster-2-default-pool-a533dc83-ew5k    100m (10%)    0 (0%)      0 (0%)           0 (0%)         26d
+  kube-system                 pdcsi-node-dw97s                                             10m (1%)      0 (0%)      20Mi (1%)        100Mi (7%)     11d
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests     Limits
+  --------           --------     ------
+  cpu                536m (57%)   125m (13%)
+  memory             570Mi (41%)  1385Mi (101%)
+  ephemeral-storage  0 (0%)       0 (0%)
+  hugepages-1Gi      0 (0%)       0 (0%)
+  hugepages-2Mi      0 (0%)       0 (0%)
+Events:              <none>
+
+
+Name:               gke-oscar-cluster-2-default-pool-b3cbdcb2-9wdi
+Roles:              <none>
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/instance-type=e2-small
+                    beta.kubernetes.io/os=linux
+                    cloud.google.com/gke-boot-disk=pd-balanced
+                    cloud.google.com/gke-container-runtime=containerd
+                    cloud.google.com/gke-cpu-scaling-level=2
+                    cloud.google.com/gke-logging-variant=DEFAULT
+                    cloud.google.com/gke-max-pods-per-node=110
+                    cloud.google.com/gke-nodepool=default-pool
+                    cloud.google.com/gke-os-distribution=cos
+                    cloud.google.com/gke-provisioning=standard
+                    cloud.google.com/gke-stack-type=IPV4
+                    cloud.google.com/machine-family=e2
+                    cloud.google.com/private-node=false
+                    failure-domain.beta.kubernetes.io/region=us-central1
+                    failure-domain.beta.kubernetes.io/zone=us-central1-f
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=gke-oscar-cluster-2-default-pool-b3cbdcb2-9wdi
+                    kubernetes.io/os=linux
+                    node.kubernetes.io/instance-type=e2-small
+                    topology.gke.io/zone=us-central1-f
+                    topology.kubernetes.io/region=us-central1
+                    topology.kubernetes.io/zone=us-central1-f
+Annotations:        container.googleapis.com/instance_id: 4411971511163117079
+                    csi.volume.kubernetes.io/nodeid:
+                      {"pd.csi.storage.gke.io":"projects/swit-dev/zones/us-central1-f/instances/gke-oscar-cluster-2-default-pool-b3cbdcb2-9wdi"}
+                    node.alpha.kubernetes.io/ttl: 0
+                    node.gke.io/last-applied-node-labels:
+                      cloud.google.com/gke-boot-disk=pd-balanced,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=2,clou...
+                    node.gke.io/last-applied-node-taints: 
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Sat, 08 Jul 2023 13:07:51 +0900
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  gke-oscar-cluster-2-default-pool-b3cbdcb2-9wdi
+  AcquireTime:     <unset>
+  RenewTime:       Thu, 03 Aug 2023 18:01:04 +0900
+Conditions:
+  Type                          Status  LastHeartbeatTime                 LastTransitionTime                Reason                          Message
+  ----                          ------  -----------------                 ------------------                ------                          -------
+  FrequentDockerRestart         False   Thu, 03 Aug 2023 17:57:55 +0900   Sat, 08 Jul 2023 13:07:51 +0900   NoFrequentDockerRestart         docker is functioning properly
+  FrequentContainerdRestart     False   Thu, 03 Aug 2023 17:57:55 +0900   Sat, 08 Jul 2023 13:07:51 +0900   NoFrequentContainerdRestart     containerd is functioning properly
+  CorruptDockerOverlay2         False   Thu, 03 Aug 2023 17:57:55 +0900   Sat, 08 Jul 2023 13:07:51 +0900   NoCorruptDockerOverlay2         docker overlay2 is functioning properly
+  FrequentUnregisterNetDevice   False   Thu, 03 Aug 2023 17:57:55 +0900   Sat, 08 Jul 2023 13:07:51 +0900   NoFrequentUnregisterNetDevice   node is functioning properly
+  KernelDeadlock                False   Thu, 03 Aug 2023 17:57:55 +0900   Sat, 08 Jul 2023 13:07:51 +0900   KernelHasNoDeadlock             kernel has no deadlock
+  ReadonlyFilesystem            False   Thu, 03 Aug 2023 17:57:55 +0900   Sat, 08 Jul 2023 13:07:51 +0900   FilesystemIsNotReadOnly         Filesystem is not read-only
+  FrequentKubeletRestart        False   Thu, 03 Aug 2023 17:57:55 +0900   Sat, 08 Jul 2023 13:07:51 +0900   NoFrequentKubeletRestart        kubelet is functioning properly
+  NetworkUnavailable            False   Thu, 03 Aug 2023 13:02:23 +0900   Thu, 03 Aug 2023 13:02:23 +0900   RouteCreated                    NodeController create implicit route
+  MemoryPressure                False   Thu, 03 Aug 2023 17:59:59 +0900   Sat, 08 Jul 2023 13:07:50 +0900   KubeletHasSufficientMemory      kubelet has sufficient memory available
+  DiskPressure                  False   Thu, 03 Aug 2023 17:59:59 +0900   Sat, 08 Jul 2023 13:07:50 +0900   KubeletHasNoDiskPressure        kubelet has no disk pressure
+  PIDPressure                   False   Thu, 03 Aug 2023 17:59:59 +0900   Sat, 08 Jul 2023 13:07:50 +0900   KubeletHasSufficientPID         kubelet has sufficient PID available
+  Ready                         True    Thu, 03 Aug 2023 17:59:59 +0900   Sat, 08 Jul 2023 13:07:53 +0900   KubeletReady                    kubelet is posting ready status. AppArmor enabled
+Addresses:
+  InternalIP:  10.128.15.230
+  ExternalIP:  34.134.86.69
+  Hostname:    gke-oscar-cluster-2-default-pool-b3cbdcb2-9wdi
+Capacity:
+  cpu:                2
+  ephemeral-storage:  98831908Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             2027964Ki
+  pods:               110
+Allocatable:
+  cpu:                940m
+  ephemeral-storage:  47060071478
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             1401276Ki
+  pods:               110
+System Info:
+  Machine ID:                 e1eed6b4b1e3ecde70cdf4ce73ba4d1d
+  System UUID:                e1eed6b4-b1e3-ecde-70cd-f4ce73ba4d1d
+  Boot ID:                    c4186478-59c0-4172-840d-1adb5354cd87
+  Kernel Version:             5.15.107+
+  OS Image:                   Container-Optimized OS from Google
+  Operating System:           linux
+  Architecture:               amd64
+  Container Runtime Version:  containerd://1.6.18
+  Kubelet Version:            v1.26.5-gke.1200
+  Kube-Proxy Version:         v1.26.5-gke.1200
+PodCIDR:                      10.32.4.0/24
+PodCIDRs:                     10.32.4.0/24
+ProviderID:                   gce://swit-dev/us-central1-f/gke-oscar-cluster-2-default-pool-b3cbdcb2-9wdi
+Non-terminated Pods:          (9 in total)
+  Namespace                   Name                                                         CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                                                         ------------  ----------  ---------------  -------------  ---
+  default                     oscar-server-2-65857cbdb6-sjwgd                              0 (0%)        0 (0%)      0 (0%)           0 (0%)         26d
+  exam-daisy                  daisy-deployment-6698959c89-dwpjm                            0 (0%)        0 (0%)      0 (0%)           0 (0%)         38s
+  exam-ryan                   ryan-deployment-6f588c5d77-5zmjq                             0 (0%)        0 (0%)      0 (0%)           0 (0%)         90s
+  kube-system                 container-watcher-qkspx                                      25m (2%)      125m (13%)  50Mi (3%)        300Mi (21%)    12d
+  kube-system                 fluentbit-gke-k6ql2                                          100m (10%)    0 (0%)      200Mi (14%)      500Mi (36%)    15d
+  kube-system                 gke-metrics-agent-97d8x                                      11m (1%)      0 (0%)      150Mi (10%)      150Mi (10%)    26d
+  kube-system                 kube-dns-5b5dfcd97b-zjgcw                                    260m (27%)    0 (0%)      110Mi (8%)       210Mi (15%)    26d
+  kube-system                 kube-proxy-gke-oscar-cluster-2-default-pool-b3cbdcb2-9wdi    100m (10%)    0 (0%)      0 (0%)           0 (0%)         26d
+  kube-system                 pdcsi-node-66m8z                                             10m (1%)      0 (0%)      20Mi (1%)        100Mi (7%)     11d
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests     Limits
+  --------           --------     ------
+  cpu                506m (53%)   125m (13%)
+  memory             530Mi (38%)  1260Mi (92%)
+  ephemeral-storage  0 (0%)       0 (0%)
+  hugepages-1Gi      0 (0%)       0 (0%)
+  hugepages-2Mi      0 (0%)       0 (0%)
+Events:              <none>
+
+
+Name:               gke-oscar-cluster-2-default-pool-c68e7d97-44o9
+Roles:              <none>
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/instance-type=e2-small
+                    beta.kubernetes.io/os=linux
+                    cloud.google.com/gke-boot-disk=pd-balanced
+                    cloud.google.com/gke-container-runtime=containerd
+                    cloud.google.com/gke-cpu-scaling-level=2
+                    cloud.google.com/gke-logging-variant=DEFAULT
+                    cloud.google.com/gke-max-pods-per-node=110
+                    cloud.google.com/gke-nodepool=default-pool
+                    cloud.google.com/gke-os-distribution=cos
+                    cloud.google.com/gke-provisioning=standard
+                    cloud.google.com/gke-stack-type=IPV4
+                    cloud.google.com/machine-family=e2
+                    cloud.google.com/private-node=false
+                    failure-domain.beta.kubernetes.io/region=us-central1
+                    failure-domain.beta.kubernetes.io/zone=us-central1-b
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=gke-oscar-cluster-2-default-pool-c68e7d97-44o9
+                    kubernetes.io/os=linux
+                    node.kubernetes.io/instance-type=e2-small
+                    topology.gke.io/zone=us-central1-b
+                    topology.kubernetes.io/region=us-central1
+                    topology.kubernetes.io/zone=us-central1-b
+Annotations:        container.googleapis.com/instance_id: 4617795715606077944
+                    csi.volume.kubernetes.io/nodeid:
+                      {"pd.csi.storage.gke.io":"projects/swit-dev/zones/us-central1-b/instances/gke-oscar-cluster-2-default-pool-c68e7d97-44o9"}
+                    node.alpha.kubernetes.io/ttl: 0
+                    node.gke.io/last-applied-node-labels:
+                      cloud.google.com/gke-boot-disk=pd-balanced,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=2,clou...
+                    node.gke.io/last-applied-node-taints: 
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Sat, 08 Jul 2023 12:59:52 +0900
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  gke-oscar-cluster-2-default-pool-c68e7d97-44o9
+  AcquireTime:     <unset>
+  RenewTime:       Thu, 03 Aug 2023 18:01:07 +0900
+Conditions:
+  Type                          Status  LastHeartbeatTime                 LastTransitionTime                Reason                          Message
+  ----                          ------  -----------------                 ------------------                ------                          -------
+  ReadonlyFilesystem            False   Thu, 03 Aug 2023 17:59:33 +0900   Sat, 08 Jul 2023 12:59:57 +0900   FilesystemIsNotReadOnly         Filesystem is not read-only
+  FrequentKubeletRestart        False   Thu, 03 Aug 2023 17:59:33 +0900   Sat, 08 Jul 2023 12:59:57 +0900   NoFrequentKubeletRestart        kubelet is functioning properly
+  FrequentDockerRestart         False   Thu, 03 Aug 2023 17:59:33 +0900   Sat, 08 Jul 2023 12:59:57 +0900   NoFrequentDockerRestart         docker is functioning properly
+  FrequentContainerdRestart     False   Thu, 03 Aug 2023 17:59:33 +0900   Sat, 08 Jul 2023 12:59:57 +0900   NoFrequentContainerdRestart     containerd is functioning properly
+  CorruptDockerOverlay2         False   Thu, 03 Aug 2023 17:59:33 +0900   Sat, 08 Jul 2023 12:59:57 +0900   NoCorruptDockerOverlay2         docker overlay2 is functioning properly
+  FrequentUnregisterNetDevice   False   Thu, 03 Aug 2023 17:59:33 +0900   Sat, 08 Jul 2023 12:59:57 +0900   NoFrequentUnregisterNetDevice   node is functioning properly
+  KernelDeadlock                False   Thu, 03 Aug 2023 17:59:33 +0900   Sat, 08 Jul 2023 12:59:57 +0900   KernelHasNoDeadlock             kernel has no deadlock
+  NetworkUnavailable            False   Thu, 03 Aug 2023 13:02:23 +0900   Thu, 03 Aug 2023 13:02:23 +0900   RouteCreated                    NodeController create implicit route
+  MemoryPressure                False   Thu, 03 Aug 2023 18:00:47 +0900   Sat, 08 Jul 2023 12:59:52 +0900   KubeletHasSufficientMemory      kubelet has sufficient memory available
+  DiskPressure                  False   Thu, 03 Aug 2023 18:00:47 +0900   Sat, 08 Jul 2023 12:59:52 +0900   KubeletHasNoDiskPressure        kubelet has no disk pressure
+  PIDPressure                   False   Thu, 03 Aug 2023 18:00:47 +0900   Sat, 08 Jul 2023 12:59:52 +0900   KubeletHasSufficientPID         kubelet has sufficient PID available
+  Ready                         True    Thu, 03 Aug 2023 18:00:47 +0900   Sat, 08 Jul 2023 12:59:53 +0900   KubeletReady                    kubelet is posting ready status. AppArmor enabled
+Addresses:
+  InternalIP:  10.128.15.228
+  ExternalIP:  34.123.111.64
+  Hostname:    gke-oscar-cluster-2-default-pool-c68e7d97-44o9
+Capacity:
+  cpu:                2
+  ephemeral-storage:  98831908Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             2027964Ki
+  pods:               110
+Allocatable:
+  cpu:                940m
+  ephemeral-storage:  47060071478
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             1401276Ki
+  pods:               110
+System Info:
+  Machine ID:                 ae2feec4087cecbd68f1fbcf9220d2ee
+  System UUID:                ae2feec4-087c-ecbd-68f1-fbcf9220d2ee
+  Boot ID:                    097de2d1-6f79-4ece-aece-64fb6ded4456
+  Kernel Version:             5.15.107+
+  OS Image:                   Container-Optimized OS from Google
+  Operating System:           linux
+  Architecture:               amd64
+  Container Runtime Version:  containerd://1.6.18
+  Kubelet Version:            v1.26.5-gke.1200
+  Kube-Proxy Version:         v1.26.5-gke.1200
+PodCIDR:                      10.32.8.0/24
+PodCIDRs:                     10.32.8.0/24
+ProviderID:                   gce://swit-dev/us-central1-b/gke-oscar-cluster-2-default-pool-c68e7d97-44o9
+Non-terminated Pods:          (15 in total)
+  Namespace                   Name                                                         CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                                                         ------------  ----------  ---------------  -------------  ---
+  default                     oscar-server-2-65857cbdb6-tr9p9                              0 (0%)        0 (0%)      0 (0%)           0 (0%)         26d
+  exam-daisy                  daisy-deployment-6698959c89-fkr7f                            0 (0%)        0 (0%)      0 (0%)           0 (0%)         39s
+  exam-jsh                    nginx-jsh-675c95594c-7tthf                                   0 (0%)        0 (0%)      0 (0%)           0 (0%)         57s
+  exam-ryan                   ryan-deployment-6f588c5d77-9wscz                             0 (0%)        0 (0%)      0 (0%)           0 (0%)         91s
+  kube-system                 container-watcher-mz4mr                                      25m (2%)      125m (13%)  50Mi (3%)        300Mi (21%)    12d
+  kube-system                 event-exporter-gke-755c4b4d97-2zc8c                          0 (0%)        0 (0%)      0 (0%)           0 (0%)         26d
+  kube-system                 fluentbit-gke-gsqt4                                          100m (10%)    0 (0%)      200Mi (14%)      500Mi (36%)    15d
+  kube-system                 gke-metrics-agent-pzm6h                                      11m (1%)      0 (0%)      150Mi (10%)      150Mi (10%)    26d
+  kube-system                 konnectivity-agent-7d4947ff9b-5mlwh                          10m (1%)      0 (0%)      30Mi (2%)        125Mi (9%)     26d
+  kube-system                 konnectivity-agent-7d4947ff9b-z6zpr                          10m (1%)      0 (0%)      30Mi (2%)        125Mi (9%)     26d
+  kube-system                 konnectivity-agent-autoscaler-84d9876b5d-nqjhk               10m (1%)      0 (0%)      10M (0%)         0 (0%)         26d
+  kube-system                 kube-proxy-gke-oscar-cluster-2-default-pool-c68e7d97-44o9    100m (10%)    0 (0%)      0 (0%)           0 (0%)         26d
+  kube-system                 l7-default-backend-9db4bd868-v27xl                           10m (1%)      0 (0%)      20Mi (1%)        0 (0%)         26d
+  kube-system                 metrics-server-v0.5.2-6697ccb79f-hf8ck                       48m (5%)      43m (4%)    105Mi (7%)       355Mi (25%)    26d
+  kube-system                 pdcsi-node-47v8v                                             10m (1%)      0 (0%)      20Mi (1%)        100Mi (7%)     11d
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests         Limits
+  --------           --------         ------
+  cpu                334m (35%)       168m (17%)
+  memory             644388480 (44%)  1655Mi (120%)
+  ephemeral-storage  0 (0%)           0 (0%)
+  hugepages-1Gi      0 (0%)           0 (0%)
+  hugepages-2Mi      0 (0%)           0 (0%)
+Events:              <none>

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mason-configmap
+data:
+  hello: "world"
+  drink: "good"
+  happy: "work"
