@@ -11,7 +11,9 @@ $ kubectl create namespace exam-mason
 $ kubectl create deployment mason-deployment --image=nginx --replicas=2 -n exam-mason
 ```
 # Exam 4
-
+```
+$ kubectl get deployment mason-deploymen -o custom-columns='DEPLOYMENT:.metadata.name','CONTAINER_IMAGE:.spec.template.spec.containers[*].image','READY_REPLICA:.status.readyReplicas','NAMESPACE:.metadata.namespace'
+```
 # Exam 5
 ```
 $ kubectl create deployment nginx-deploy --image=nginx:1.16 --replicas=1
