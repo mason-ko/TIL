@@ -163,11 +163,28 @@ spec:
           resource: requests.cpu
           divisor: 1m
 ```
+
 #### Downward API 사용 시기 이해 
 Downward API 로 하용 가능한 메타데이터는 상당히 제한적이므로, 더 많은 정보가 필요한 경우  
 쿠버네티스 API 서버에서 직접 가져와야 한다.  
+
 ## 8.2 쿠버네티스 API 서버와 통신하기 
+서비스와 파드에 관한 정보는 서비스 관련 환경변수나 DNS로 얻을 수 있다.  
+그러나 애플리케이션이 다른 리소스의 정보가 필요하거나 가능한 한 최신 정보에 접근해야 하는 경우  
+API 서버와 직접 통신해야 한다.
+
 ### 8.2.1 쿠버네티스 REST API 살펴보기 
+```
+$ kubectl cluster-info
+$ kubectl proxy
+$ curl localhost:8001
+$ curl http://localhost:8001
+$ curl http://localhost:8001/apis/batch/v1
+$ curl http://localhost:8001/apis/batch/v1/jobs
+$ curl http://localhost:8001/apis/batch/v1/namespaces/default/jobs/my-job
+```
+
 ### 8.2.2 파드 내에서 API 서버와 통신 
+
 ### 8.2.3 앰배서더 컨테이너를 이용한 API 서버 통신 간소화 
 ### 8.2.4 클라이언트 라이브러리를 사용해 API 서버와 통신 
