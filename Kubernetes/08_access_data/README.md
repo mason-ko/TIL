@@ -248,11 +248,6 @@ spec:
 - Golang: https://github.com/kubernetes/client—go
 - Python: https://github.com/kubernetes-incubator/client-python/
 
-### 정리
-8장에서는 파드 내에서 실행되는 애플리케이션이 애플리케이션 자신, 다른 파드, 클러스터에 배포된 다른 구성 요소의 데이터를 얻는 방법을 살펴봤다.
-- 파드의 이름, 네임스페이스 및 기타 메타데이터가 환경변수 또는 downward API 볼륨의 파일로 컨테이너 내부의 프로세스에 노출되는 방법
-
-
 
 
 
