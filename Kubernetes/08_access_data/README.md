@@ -155,6 +155,7 @@ spec:
 <img width="615" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/ab163907-5ee4-4d09-9362-bbeb8a27e001">
 
 #### 볼륨 스펙에서 컨테이너 수준의 메타데이터 참조
+
 ```yaml
 spec: 
   volumes:
