@@ -12,7 +12,7 @@
 
 # 8장 애플리케이션에서 파드 메타데이터와 그 외의 리소스에 액세스하기
 ## 8.1 Downward API로 메타데이터 전달 
-Downward API는 쿠버네티스에서 컨ㅔ이너에 자신의 정보를 전달하는 메커니즘이며,  
+Downward API는 쿠버네티스에서 컨테이너에 자신의 정보를 전달하는 메커니즘이며,  
 주로 파드에 대한 정보를 파드 내의 컨테이너에게 알려주기 위해 사용된다.  
 Downward API를 사용하면 파드의 필드를 컨테이너의 환경 변수나 파일로 주입 할 수 있다.
 주요시나리오
@@ -81,10 +81,12 @@ spec:
           resource: limits.memory
           divisor: 1Ki
 ```
+
 이 예제에서는 CPU 요청에 대한 제수를 1m(1밀리코어 또는 1000분의 1 CPU 코어)로 설정함.  
 CPU 요청을 15m로 설정했기 때문에 환경변수 CONTAINER_CPU_REQUEST_MILLICORES는 15로 설정됨.  
 마찬가지로 메모리 제한을 4Mi(4메비바이트)로 설정하고 제수를 1Ki(1키비바이트)로 설정했으므로  
-CONTAINER_MEMORY_LIMIT_KIBIBYTES 는 4096으로 설정됨 
+CONTAINER_MEMORY_LIMIT_KIBIBYTES 는 4096으로 설정됨  
+
 <img width="688" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/42c7a1f9-310e-4436-b5a5-ddec48bbd9d5">
 
 파드 생성 후 환경변수로 확인
@@ -93,6 +95,7 @@ $ kubectl exec downward env
 ```
 
 ### 8.1.3 downwardAPI 볼륨에 파일로 메타데이터 전달 
+
 ```yaml
 apiVersion: v1
 kind: Pod
@@ -150,6 +153,7 @@ spec:
 ```
 
 <img width="615" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/ab163907-5ee4-4d09-9362-bbeb8a27e001">
+
 #### 볼륨 스펙에서 컨테이너 수준의 메타데이터 참조
 ```yaml
 spec: 
