@@ -93,18 +93,113 @@ $ kubectl describe rc kubia-v2
 <img width="748" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/4e5d96e0-f535-445f-ab86-26037d8fb22c">
 
 
-### 9.2.3 kubectl rolling-updateS 더 이상 사용하지 않는 이유
+### 9.2.3 kubectl rolling-update를 더 이상 사용하지 않는 이유
+이 명령어는 쿠버네티스의 새로운 기능들과 더 나은 업데이트 매키너짐을 제공하기 위해 중단되었다.  
+대신 kubectl rollout 서브 커맨드가 도입됨.  
 
-
+1. 기능제한: 'kubectl rolling-update'는 RC 만 지원했다.
+2. 복잡성: 롤링 업데이트를 수행하는데 필요한 여러단계들이 있었고, 휴면에러 발생요인 큼
+3. 디플로이먼트 리소스의 등장: 디플로이먼트로, 선언적업데이트, 롤링업데이트 등 진보된 기능을 제공하므로 이걸 사용하면 됨.
+4. 선언적 업데이트: kubectl rollout 와 함께 사용되는 디플로이먼트는 선언적 접근방식을 사용하여 워크로드의 상태를 지정할 수 있다. 이는 워크로드의 원하는 상태를 명시적으로 정의하고, 쿠버네티스가 이 상태를 달성하기 위해 필요한 조치를 자동으로 수행하도록 허용한다.
 
 ## 9.3 애플리케이션을 선언적으로 업데이트하기 위한 디플로이먼트 사용하기
-### 9.3.1 디플로이먼트 생성
+디플로이먼트는 낮은 수준의 개념으로 간주되는 RC, 레플리카셋을 통해 수행하는 대신 애플리케이션을 배포하고  
+선언적으로 업데이트하기 위한 높은 수준의 리소스다.  
+레플리카셋도 파드를 복제하고 관리한다.  
+디플로이먼트를 사용하는 경우 실제 파드는 디플로이먼트가 아닌 디플로이먼트의 레플리카셋에 의해 생성되고 관리된다.
+<img width="427" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/b3f3df30-1189-48f3-93ca-0903d43807da">
 
+
+### 9.3.1 디플로이먼트 생성
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubia # 디플로이먼트이름에 버전을 포함할 필요 없음
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: kubia
+      labels:
+        app: kubia
+    spec:
+      containers:
+      - image: luksa/kubia:v1
+        name: nodejs
+  selector:
+    matchLabels:
+      app: kubia
+```
+#### 디플로이먼트 리소스 생성 
+<img width="613" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/4bfb20ad-9ae7-49c0-99ef-daa35a7f2f4b">
+
+```
+$ kubectl rollout status deployment kubia
+$ kubectl get po
+```
+#### 디플로이먼트가 레플리카셋을 생성하는 방법과 레플리카셋이 파드를 생성하는 방식 이해 
+1. 디플로이먼트 (Deployment):
+- 디플로이먼트는 상위 레벨의 오브젝트로, 애플리케이션의 선언적 업데이트와 롤백을 제공합니다.
+- 디플로이먼트를 생성하면, 해당 디플로이먼트는 레플리카셋을 생성합니다.
+- 디플로이먼트 스펙에 정의된 파드 템플릿을 사용하여 레플리카셋을 생성합니다.
+- 디플로이먼트를 업데이트하면 (예: 이미지 버전 변경), 새 레플리카셋이 생성되고 이전 레플리카셋은 점차 셧다운됩니다. 이는 롤링 업데이트 전략을 사용하여 수행됩니다.
+2. 레플리카셋 (ReplicaSet):
+- 레플리카셋은 파드의 원하는 수량을 유지하는 역할을 합니다. 이 수량은 레플리카셋의 스펙에 정의되어 있습니다.
+- 레플리카셋은 디플로이먼트에 의해 간접적으로 관리되지만, 사용자는 직접 레플리카셋을 생성하고 관리할 수도 있습니다. 그러나 일반적으로 이것은 권장되지 않습니다.
+- 레플리카셋이 파드를 생성할 때, 디플로이먼트에서 받은 파드 템플릿을 사용합니다.
+- 레플리카셋은 항상 파드의 수를 원하는 수량으로 유지하기 위해 작동합니다. 파드가 충돌하거나 삭제되면, 레플리카셋은 새 파드를 생성하여 이를 보완합니다.
+3. 파드 (Pod):
+- 파드는 쿠버네티스 클러스터에서 컨테이너를 실행하는 기본 단위입니다.
+- 레플리카셋은 파드 템플릿을 바탕으로 파드를 생성하며, 이 템플릿은 디플로이먼트에서 상속받습니다.
+- 파드는 클러스터의 노드에서 실제로 실행되는 컨테이너의 집합체입니다.
+
+```
+$ kubectl get replicasets
+```
+#### 서비스로 파드 액세스 
+이전에 생성한 서비스로 액세스 가능.
 
 ### 9.3.2 디플로이먼트 업데이트
+Recreate전략: 새파드를 만들기 전에 이전파드를 모두 삭제. (다운타임발생)
+롤링업데이트 전략: 이전 파드를 하나씩 제거하고 동시에 새 파드를 추가해 다운타임 없도록 함.
+- 다만 이번 버전과 새 버전이 동시 호환 되는 경우에만 가능.
+
+#### 데모 목적으로 롤링 업데이트 속도 느리게 하기 
+minReadySeconds 속성값으로 느리게 업데이트 가능.  
+```
+$ kubectl patch deployment kubia -p '{"spec": {"minReadySeconds": 10}}' "kubia" patched
+```
+명령어로 파드 템플릿 이미지 변경 
+```
+$ kubectl set image deployment kubia nodejs=luksa/kubia:v2
+deployment "kubia" image updated
+```
+<img width="613" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/ef46482c-de53-48c4-93ea-be29de828ce4">
+
+#### 디플로이먼트와 그 외의 리소스 수정하는 방법
+<img width="574" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/ae86ba80-632a-43db-98b9-718359fe8578">
+<img width="563" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/8da8771e-0933-4e53-aee8-f28688d1a2ea">
+
+<img width="692" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/0d0f91df-a56d-4902-abc9-9e9004a8ba63">
 
 
 ### 9.3.3 디플로이먼트롤백
+현재 v2 기준으로 v3 준비.(v3 에러버전)  
+v3 배포  
+```
+$ kuberctl set image deployment kubia nodejs=luksa/kubia:v3
+```
+에러 발생.  
+#### 롤아웃 되돌리기
+마지막 롤아웃 취소해서 이전 버전으로 쉽게 돌릴 수 있다.  
+```
+$ kubectl rollout undo deployment kubia
+```
+#### 특정 디플로이먼트 개정으로 롤백 
+```
+$ kubectl rollout undo deployment kubia --to-revision=1
+```
 
 ### 9.3.4 롤아웃 속도 제어
 
