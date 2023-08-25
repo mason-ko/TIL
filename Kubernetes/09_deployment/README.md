@@ -228,11 +228,20 @@ $ kubectl rollout undo deployment kubia --to-revision=1
 maxUnavailable은 원하는 레플리카 수에 비례한다.  
 
 ### 9.3.5 롤아웃 프로세스 일시 중지
+#### 롤아웃 일시 정지
 ```
 $ kubectl rollout pause deployment kubia
 ```
-
+#### 롤아웃 재개 
+```
+$ kubectl rollout resume deployment kubia
+```
+#### 롤아웃을 방지하기 위한 일시 중지 기능 사용 
+디플로이먼트 일시 중지 기능을 사용하면 롤아웃 프로세스삭 시작돼 디플로이먼트를 업데이트 하는것을 막을 수 있고,  
+디플로이먼트를 여러 번 변경하면서 필요한 모든 변경을 완료한 후에 롤아웃을 시작하도록 할 수 있다.
 ### 9.3.6 잘못된 버전의 롤아웃 방지
+minReadySeconds 속성으로 롤아웃 속도를 늦춰 롤링 업데이트 과정을 직접 볼 수 있고,  
+해당 속성의 주요 기능은 오작동 버전의 배포를 방지하기 위함이다.  
 
 
 ## 9.4 요약
