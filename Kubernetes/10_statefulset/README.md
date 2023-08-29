@@ -53,8 +53,8 @@
 #### 파드 인스턴스별로 하나의 레플리카셋 사용하기 
 <img width="414" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/7767c319-af8d-45cb-8994-14be72f0df46">
 
-
-
+#### 동일 볼륨을 여러 개 디렉터리로 사용하기 
+<img width="558" alt="image" src="https://github.com/mason-ko/TIL/assets/30224146/de6037d8-8f3e-411b-86fc-881666afbb9b">
 
 ### 10.1.2 각 파드에 안정적인 아이덴티티 제공하기
 
