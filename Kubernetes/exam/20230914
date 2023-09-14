@@ -1,0 +1,7 @@
+# 1
+
+kubectl create secret generic super-scret \
+    --from-literal=username=mason \
+    --from-literal=password='bob' -n exam-mason
+
+    
