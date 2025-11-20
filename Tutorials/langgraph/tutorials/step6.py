@@ -99,10 +99,11 @@ def simple_tool_agent_example():
     def should_continue(state: State) -> Literal["tools", "end"]:
         last_message = state["messages"][-1]
 
+        print("OK?", last_message)
         # LLM이 tool을 호출하려고 하면
         if hasattr(last_message, "tool_calls") and last_message.tool_calls:
             return "tools"
-        else:
+        else:            
             return "end"
 
     # 그래프 구성
