@@ -461,10 +461,10 @@ if __name__ == "__main__":
     # print()
 
     # 예제 2: 루프
-    print("예제 2: 루프 (반복)")
-    print("-" * 60)
-    loop_example()
-    print("\n")
+    # print("예제 2: 루프 (반복)")
+    # print("-" * 60)
+    # loop_example()
+    # print("\n")
 
     # # 예제 3: LLM 의사결정
     # print("예제 3: LLM 기반 의사결정")
@@ -479,6 +479,6 @@ if __name__ == "__main__":
     # print("\n")
 
     # # 예제 5: 최대 반복 제한
-    # print("예제 5: 최대 반복 횟수 제한")
-    # print("-" * 60)
-    # max_iterations_example()
+    print("예제 5: 최대 반복 횟수 제한")
+    print("-" * 60)
+    max_iterations_example()

@@ -81,7 +81,7 @@ def simple_tool_agent_example():
         messages: Annotated[list, add_messages]
 
     # Tool 목록
-    tools = [calculate, get_weather]
+    tools = [calculate, get_weather, search_web]
 
     # Tool을 사용할 수 있는 LLM 생성
     llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=os.getenv("GOOGLE_API_KEY"))
@@ -130,7 +130,8 @@ def simple_tool_agent_example():
     # 테스트
     questions = [
         "25 곱하기 4는 얼마인가요?",
-        "서울 날씨 알려줘"
+        "서울 날씨 알려줘",
+        "langfuse는 뭐지 "
     ]
 
     for question in questions:
@@ -443,19 +444,19 @@ if __name__ == "__main__":
     simple_tool_agent_example()
     print()
 
-    # 예제 2: ReAct Agent
-    print("\n예제 2: ReAct 패턴 에이전트")
-    print("-" * 60)
-    react_agent_example()
-    print()
+    # # 예제 2: ReAct Agent
+    # print("\n예제 2: ReAct 패턴 에이전트")
+    # print("-" * 60)
+    # react_agent_example()
+    # print()
 
-    # 예제 3: 스트리밍 Agent
-    print("\n예제 3: 스트리밍 Agent")
-    print("-" * 60)
-    streaming_agent_example()
-    print()
+    # # 예제 3: 스트리밍 Agent
+    # print("\n예제 3: 스트리밍 Agent")
+    # print("-" * 60)
+    # streaming_agent_example()
+    # print()
 
-    # 예제 4: 에러 처리
-    print("\n예제 4: 에러 처리 Agent")
-    print("-" * 60)
-    error_handling_agent_example()
+    # # 예제 4: 에러 처리
+    # print("\n예제 4: 에러 처리 Agent")
+    # print("-" * 60)
+    # error_handling_agent_example()

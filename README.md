@@ -11,13 +11,15 @@ AI 시대의 필수 기술들을 단계별로 학습할 수 있는 튜토리얼 
 ```
 [기초] LangGraph, GraphRAG
    ↓
-[필수] LangSmith, Vector DB
+[필수] Langfuse, Vector DB, Model Serving
    ↓
 [중급] Advanced RAG, Multi-Agent
    ↓
-[고급] Model Serving, Fine-tuning, MLOps
+[고급] Fine-tuning, MLOps
    ↓
 [확장] Multimodal
+
+💡 로컬 LLM 중심 (비용 최소화)
 ```
 
 ## 튜토리얼 목록
@@ -34,7 +36,7 @@ AI 시대의 필수 기술들을 단계별로 학습할 수 있는 튜토리얼 
 **소요 시간**: 2-3시간
 **선수 지식**: Python 기초, LangChain 기본
 
-### 2️⃣ [GraphRAG](./Tutorials/langgraph/graphrag_tutorial/)
+### 2️⃣ [GraphRAG](./Tutorials/graphrag/)
 **그래프 기반 문서 검색 증강 생성**
 
 - 문서 처리 및 임베딩
@@ -46,17 +48,18 @@ AI 시대의 필수 기술들을 단계별로 학습할 수 있는 튜토리얼 
 **소요 시간**: 3-4시간
 **선수 지식**: LangGraph, Vector 개념
 
-### 3️⃣ [LangSmith](./Tutorials/langsmith/)
-**프로덕션 LLM 모니터링 플랫폼**
+### 3️⃣ [Langfuse](./Tutorials/langfuse/)
+**오픈소스 LLM Observability 플랫폼**
 
+- Self-hosted 가능 (완전 무료)
+- Ollama, vLLM 등 로컬 LLM 최적화
 - 실시간 트레이싱 및 디버깅
-- 성능 메트릭 모니터링 (토큰, 비용, 지연시간)
-- 평가 프레임워크 (Evaluation)
-- A/B 테스팅 및 데이터셋 관리
+- 평가 프레임워크 및 데이터셋 관리
+- 데이터 프라이버시 (내 서버에 저장)
 
 **난이도**: ⭐⭐ 초급
 **소요 시간**: 2-3시간
-**핵심 가치**: 프로덕션 필수 도구
+**핵심 가치**: 로컬 LLM 필수 도구, 비용 $0
 
 ### 4️⃣ [Vector Database](./Tutorials/vectordb/)
 **의미 기반 검색을 위한 벡터 DB**
@@ -156,13 +159,13 @@ AI 시대의 필수 기술들을 단계별로 학습할 수 있는 튜토리얼 
 ### 초보자 추천 순서
 1. LangGraph (기본)
 2. Vector DB
-3. LangSmith
+3. Langfuse
 4. GraphRAG
 
-### 실무자 추천 순서
-1. LangSmith (모니터링 필수)
-2. Advanced RAG (성능 개선)
-3. Multi-Agent (복잡한 작업)
+### 실무자 추천 순서 (로컬 LLM)
+1. Model Serving (Ollama, vLLM)
+2. Langfuse (모니터링)
+3. Advanced RAG (성능 개선)
 4. MLOps (안정적 운영)
 
 ### 비용 절감 목표
@@ -209,10 +212,10 @@ source venv/bin/activate  # Linux/Mac
 | 기술 | 난이도 | 비용 | 프로덕션 | 학습 우선순위 |
 |------|--------|------|----------|--------------|
 | LangGraph | ⭐ | 무료 | ⭐⭐⭐ | 🔥 높음 |
-| LangSmith | ⭐⭐ | 무료/유료 | ⭐⭐⭐⭐⭐ | 🔥 높음 |
+| Langfuse | ⭐⭐ | 무료 (Self-hosted) | ⭐⭐⭐⭐⭐ | 🔥 높음 (로컬 LLM) |
 | Vector DB | ⭐⭐ | 무료/유료 | ⭐⭐⭐⭐ | 🔥 높음 |
 | Advanced RAG | ⭐⭐⭐ | 중간 | ⭐⭐⭐⭐ | 중간 |
-| Model Serving | ⭐⭐⭐ | 높음(인프라) | ⭐⭐⭐⭐ | 중간 |
+| Model Serving | ⭐⭐⭐ | 중간(인프라) | ⭐⭐⭐⭐⭐ | 🔥 높음 (비용절감) |
 | Multi-Agent | ⭐⭐⭐⭐ | 높음 | ⭐⭐⭐ | 낮음 |
 | Fine-tuning | ⭐⭐⭐⭐ | 높음(GPU) | ⭐⭐⭐ | 낮음 |
 | MLOps | ⭐⭐⭐⭐ | 중간 | ⭐⭐⭐⭐⭐ | 높음 |
@@ -222,13 +225,17 @@ source venv/bin/activate  # Linux/Mac
 
 ## 💡 실무 활용 시나리오
 
-### 시나리오 1: 사내 문서 검색 챗봇
+### 시나리오 1: 사내 문서 검색 챗봇 (로컬 LLM)
 ```
 필요한 튜토리얼:
-1. Vector DB → 문서 임베딩
-2. Advanced RAG → 검색 정확도 향상
-3. LangSmith → 품질 모니터링
-4. MLOps → 안정적 배포
+1. Model Serving (Ollama) → 로컬 LLM 구축
+2. Vector DB → 문서 임베딩
+3. Advanced RAG → 검색 정확도 향상
+4. Langfuse → 품질 모니터링
+5. MLOps → 안정적 배포
+
+비용: 서버만 ($100~300/월)
+vs API 기반: $1,000~5,000/월
 ```
 
 ### 시나리오 2: 자동화된 고객 지원
@@ -236,16 +243,20 @@ source venv/bin/activate  # Linux/Mac
 필요한 튜토리얼:
 1. LangGraph → 대화 플로우
 2. Multi-Agent → 문의 분류 + 답변
-3. LangSmith → 성능 추적
+3. Langfuse → 성능 추적
 4. Multimodal → 이미지 문의 처리
 ```
 
-### 시나리오 3: 비용 최적화
+### 시나리오 3: 완전 로컬 스택 (최대 비용 절감)
 ```
 필요한 튜토리얼:
-1. Model Serving → 자체 모델 운영
-2. Advanced RAG → 재시도 감소
-3. Fine-tuning → 작은 모델로 고품질
+1. Model Serving (Ollama/vLLM) → 자체 모델 운영
+2. Vector DB (ChromaDB) → 로컬 임베딩
+3. Langfuse (Self-hosted) → 무료 모니터링
+4. Fine-tuning → 작은 모델로 고품질
+
+총 비용: ~$0 (개발용 PC 활용)
+또는 서버: $200~500/월 (프로덕션)
 ```
 
 ---
