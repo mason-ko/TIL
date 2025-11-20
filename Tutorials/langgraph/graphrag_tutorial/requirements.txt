@@ -1,0 +1,29 @@
+# GraphRAG 학습 튜토리얼 필수 패키지
+
+# Google Gemini API
+google-generativeai>=0.3.0
+
+# LangChain 및 관련 패키지
+langchain>=0.1.0
+langchain-google-genai>=0.0.11
+langchain-community>=0.0.20
+langchain-text-splitters>=0.0.1
+
+# 벡터 저장소
+faiss-cpu>=1.7.4
+
+# 그래프 처리
+networkx>=3.0
+
+# 시각화
+matplotlib>=3.7.0
+
+# 데이터 모델링
+pydantic>=2.0.0
+
+# 환경변수 관리
+python-dotenv>=1.0.0
+
+# 유틸리티
+numpy>=1.24.0
+typing-extensions>=4.5.0
