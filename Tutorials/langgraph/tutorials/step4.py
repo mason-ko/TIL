@@ -403,12 +403,12 @@ if __name__ == "__main__":
     # print("\n")
     #
     # # 예제 4: 체크포인트
-    print("예제 4: 체크포인트 (상태 영속성)")
-    print("-" * 60)
-    checkpoint_example()
-    print("\n")
-    #
-    # # 예제 5: 복잡한 State
-    # print("예제 5: 복잡한 State 구조")
+    # print("예제 4: 체크포인트 (상태 영속성)")
     # print("-" * 60)
-    # complex_state_example()
+    # checkpoint_example()
+    # print("\n")
+    #
+    # 예제 5: 복잡한 State
+    print("예제 5: 복잡한 State 구조")
+    print("-" * 60)
+    complex_state_example()

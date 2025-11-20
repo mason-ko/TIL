@@ -455,10 +455,10 @@ if __name__ == "__main__":
     print()
 
     # 예제 1: 단순 조건 분기
-    print("예제 1: 단순 조건부 분기")
-    print("-" * 60)
-    simple_conditional_example()
-    print()
+    # print("예제 1: 단순 조건부 분기")
+    # print("-" * 60)
+    # simple_conditional_example()
+    # print()
 
     # 예제 2: 루프
     print("예제 2: 루프 (반복)")
@@ -466,19 +466,19 @@ if __name__ == "__main__":
     loop_example()
     print("\n")
 
-    # 예제 3: LLM 의사결정
-    print("예제 3: LLM 기반 의사결정")
-    print("-" * 60)
-    llm_decision_example()
-    print()
+    # # 예제 3: LLM 의사결정
+    # print("예제 3: LLM 기반 의사결정")
+    # print("-" * 60)
+    # llm_decision_example()
+    # print()
 
-    # 예제 4: 다중 경로
-    print("예제 4: 다중 경로 워크플로우")
-    print("-" * 60)
-    multi_path_example()
-    print("\n")
+    # # 예제 4: 다중 경로
+    # print("예제 4: 다중 경로 워크플로우")
+    # print("-" * 60)
+    # multi_path_example()
+    # print("\n")
 
-    # 예제 5: 최대 반복 제한
-    print("예제 5: 최대 반복 횟수 제한")
-    print("-" * 60)
-    max_iterations_example()
+    # # 예제 5: 최대 반복 제한
+    # print("예제 5: 최대 반복 횟수 제한")
+    # print("-" * 60)
+    # max_iterations_example()
