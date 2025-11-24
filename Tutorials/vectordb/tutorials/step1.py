@@ -40,7 +40,7 @@ def example1_basic_usage():
     print(f"문서 {len(documents)}개 추가 완료\n")
 
     # 검색
-    query = "개 먹이"
+    query = "멍멍이 먹이"
     print(f"검색어: '{query}'")
 
     results = collection.query(
@@ -163,7 +163,7 @@ def example4_distance_metrics():
     docs = [
         "머신러닝은 인공지능의 한 분야입니다",
         "딥러닝은 머신러닝의 한 종류입니다",
-        "강아지는 귀여운 동물입니다"
+        "강아지는 게으른 동물입니다"
     ]
 
     collection_cosine.add(
@@ -261,35 +261,35 @@ if __name__ == "__main__":
     print()
 
     # 예제 1: 기본 사용법
-    example1_basic_usage()
-    print("-" * 60)
-    print()
+    # example1_basic_usage()
+    # print("-" * 60)
+    # print()
 
     # 예제 2: 메타데이터
-    example2_metadata()
-    print("-" * 60)
-    print()
+    # example2_metadata()
+    # print("-" * 60)
+    # print()
 
-    # 예제 3: 영구 저장
-    example3_persistent()
-    print("-" * 60)
-    print()
+    # # 예제 3: 영구 저장
+    # example3_persistent()
+    # print("-" * 60)
+    # print()
 
-    # 예제 4: 거리 메트릭
+    # # 예제 4: 거리 메트릭
     example4_distance_metrics()
     print("-" * 60)
     print()
 
-    # 예제 5: 간단한 RAG
-    example5_simple_rag()
-    print("=" * 60)
-    print()
+    # # 예제 5: 간단한 RAG
+    # example5_simple_rag()
+    # print("=" * 60)
+    # print()
 
-    print("✅ 모든 예제 완료!")
-    print()
-    print("📊 다음 단계:")
-    print("   1. ./chroma_data 폴더에 저장된 데이터 확인")
-    print("   2. 다양한 검색어로 실험")
-    print("   3. 자신만의 지식 베이스 구축")
-    print()
-    print("📚 다음 튜토리얼: step2.py - 임베딩 모델 최적화")
+    # print("✅ 모든 예제 완료!")
+    # print()
+    # print("📊 다음 단계:")
+    # print("   1. ./chroma_data 폴더에 저장된 데이터 확인")
+    # print("   2. 다양한 검색어로 실험")
+    # print("   3. 자신만의 지식 베이스 구축")
+    # print()
+    # print("📚 다음 튜토리얼: step2.py - 임베딩 모델 최적화")

@@ -5,9 +5,13 @@ pip install chromadb langchain-community
 """
 
 import chromadb
-from langchain_community.llms import Ollama
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+from langchain_community.llms import Ollama
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 def create_knowledge_base():
     """지식 베이스 구축"""
@@ -61,14 +65,18 @@ def rag_query(collection, question):
     # 1. 관련 문서 검색
     results = collection.query(
         query_texts=[question],
-        n_results=2
+        n_results=3
     )
 
     context = "\n".join(results['documents'][0])
     print(f"검색된 컨텍스트:\n{context}\n")
 
     # 2. LLM에 질문
-    llm = Ollama(model="llama3")
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-2.5-flash",
+        temperature=0.7,
+        google_api_key=os.getenv("GOOGLE_API_KEY")
+    )
 
     prompt = f"""다음 정보를 바탕으로 질문에 답하세요. 정보에 없으면 모른다고 하세요.
 
@@ -109,8 +117,8 @@ def main():
             rag_query(collection, q)
             print("-" * 60)
     except Exception as e:
-        print(f"❌ Ollama 실행 확인 필요: {e}")
-        print("   ollama pull llama3")
+        print(f"❌ 에러 발생: {e}")
+        print("   GOOGLE_API_KEY 환경변수 설정이 필요할 수 있습니다.")
 
     print("\n✅ RAG 시스템 구축 완료!")
     print("\n💡 핵심: 검색 → 컨텍스트 → LLM")

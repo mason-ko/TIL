@@ -103,7 +103,7 @@ def simple_tool_agent_example():
         # LLM이 tool을 호출하려고 하면
         if hasattr(last_message, "tool_calls") and last_message.tool_calls:
             return "tools"
-        else:            
+        else:
             return "end"
 
     # 그래프 구성
@@ -342,7 +342,7 @@ def error_handling_agent_example():
     def unreliable_tool(input: str) -> str:
         """가끔 실패하는 도구 (테스트용)"""
         import random
-        if random.random() < 0.3:  # 30% 확률로 실패
+        if random.random() < 0.9:  # 30% 확률로 실패
             raise Exception("도구 실행 실패!")
         return f"처리 완료: {input}"
 
@@ -352,7 +352,9 @@ def error_handling_agent_example():
     llm_with_tools = llm.bind_tools(tools)
 
     def agent(state: State) -> State:
+        print("AGENT")
         response = llm_with_tools.invoke(state["messages"])
+        print(response)
         return {"messages": [response]}
 
     def call_tools(state: State) -> State:
@@ -361,6 +363,7 @@ def error_handling_agent_example():
         tool_results = []
 
         for tool_call in last_message.tool_calls:
+            print(tool_call)
             try:
                 # Tool 찾기
                 tool_map = {t.name: t for t in tools}
@@ -424,7 +427,7 @@ def error_handling_agent_example():
     print("="*60 + "\n")
 
     result = app.invoke({
-        "messages": [HumanMessage(content="10 + 20을 계산해주세요")],
+        "messages": [HumanMessage(content="김치볶음밥을 계산해주세요")],
         "error_count": 0
     })
 
@@ -440,10 +443,10 @@ if __name__ == "__main__":
     print()
 
     # 예제 1: 간단한 Tool Agent
-    print("예제 1: 간단한 Tool 사용 에이전트")
-    print("-" * 60)
-    simple_tool_agent_example()
-    print()
+    # print("예제 1: 간단한 Tool 사용 에이전트")
+    # print("-" * 60)
+    # simple_tool_agent_example()
+    # print()
 
     # # 예제 2: ReAct Agent
     # print("\n예제 2: ReAct 패턴 에이전트")
@@ -458,6 +461,6 @@ if __name__ == "__main__":
     # print()
 
     # # 예제 4: 에러 처리
-    # print("\n예제 4: 에러 처리 Agent")
-    # print("-" * 60)
-    # error_handling_agent_example()
+    print("\n예제 4: 에러 처리 Agent")
+    print("-" * 60)
+    error_handling_agent_example()
